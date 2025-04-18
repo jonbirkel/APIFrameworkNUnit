@@ -1,7 +1,6 @@
-using NUnit.Framework;
-using RestSharp;
-using FluentAssertions;
 using System.Security.Cryptography.X509Certificates;
+using NUnit.Framework.Internal;
+using RestSharp;
 
 namespace APIFrameworkNUnit.Helpers
 {
@@ -15,6 +14,8 @@ namespace APIFrameworkNUnit.Helpers
 
             var response = client.Execute(request);
 
+            LogResponse(response);
+
             return response;
         }
 
@@ -26,6 +27,9 @@ namespace APIFrameworkNUnit.Helpers
             request.AddStringBody(payload, DataFormat.Json);
 
             var response = client.Execute(request);
+
+            LogResponse(response);
+
             return response;
         }
 
@@ -37,6 +41,9 @@ namespace APIFrameworkNUnit.Helpers
             request.AddStringBody(payload, DataFormat.Json);
 
             var response = client.Execute(request);
+
+            LogResponse(response);
+
             return response;
         }
 
@@ -48,7 +55,19 @@ namespace APIFrameworkNUnit.Helpers
             request.AddStringBody(payload, DataFormat.Json);
 
             var response = client.Execute(request);
+
+            LogResponse(response);
+
             return response;
         }
+
+        public static void LogResponse(RestResponse response)
+        {
+            TestContext.WriteLine($"Status Code   : {response.StatusCode} ({(int)response.StatusCode})");
+            TestContext.WriteLine($"Is Successful : {response.IsSuccessful}");
+            TestContext.WriteLine($"Error Message : {response.ErrorMessage ?? "None"}");
+            TestContext.WriteLine($"Content       :\n{response.Content}");
+        }
+
     }
 }
