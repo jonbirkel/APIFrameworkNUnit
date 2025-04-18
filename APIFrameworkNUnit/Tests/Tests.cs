@@ -1,31 +1,28 @@
-using NUnit.Framework;
 using RestSharp;
-using FluentAssertions;
 using APIFrameworkNUnit.Helpers;
+using APIFrameworkNUnit.Assertions;
+using Newtonsoft.Json.Linq;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 
 namespace APIFrameworkNUnit.Tests
 {
     public class JsonPlaceholderTests
     {
         [Test, Order(1)]
-        public void GetPost_ShouldReturnExpectedData()
+        public void Step01_GETPlaceholder()
         {
-            var client = new RestClient("https://jsonplaceholder.typicode.com");
-            var request = new RestRequest("/posts/1", Method.Get);
-
-            var response = client.Execute(request);
-
-            response.IsSuccessful.Should().BeTrue();
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            response.Content.Should().Contain("sunt aut facere");
-        }
-
-        [Test, Order(2)]
-        public void GetPost2()
-        {
-            string path = "";
+            string path = "https://jsonplaceholder.typicode.com/posts";
             var response = RestfulHelpers.ExecuteGetRequest(path);
-            response.IsSuccessful.Should().BeTrue();
+
+            Asserts.AssertResponseCode((int)response.StatusCode);
+
+            //ResponseAsserts will make sure response content is not null.
+            JArray userInformation = ResponseAsserts.ParseContentAsJArray(response);
+
+            //Now we check the data to validate no nulls are returned in the dataset.
+            var nullsInDataset = userInformation
+                .OfType<JObject>()
+                .Any(u => u.Properties().Any(p => p.Value.Type == JTokenType.Null));
         }
     }
 }
