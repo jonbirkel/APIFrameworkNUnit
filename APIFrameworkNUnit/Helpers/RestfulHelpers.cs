@@ -47,12 +47,10 @@ namespace APIFrameworkNUnit.Helpers
             return response;
         }
 
-        public static RestResponse ExecuteDeleteRequest(string path, string payload)
+        public static RestResponse ExecuteDeleteRequest(string path)
         {
             var client = new RestClient(path);
             var request = new RestRequest(path, Method.Delete);
-
-            request.AddStringBody(payload, DataFormat.Json);
 
             var response = client.Execute(request);
 
