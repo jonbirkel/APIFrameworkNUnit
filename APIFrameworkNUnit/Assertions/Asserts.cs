@@ -17,10 +17,6 @@ namespace APIFrameworkNUnit.Assertions
             {
                 Assert.Fail($"Assertion Failed.  Response Code received was {responseCode}");
             }
-            else
-            { 
-                Assert.Pass(); 
-            }
         }
     }
 }
